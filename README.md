@@ -1,1 +1,1 @@
-# social-pocket
+# social-pocket-react
