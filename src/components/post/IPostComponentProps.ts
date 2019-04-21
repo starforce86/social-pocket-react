@@ -1,6 +1,8 @@
 import { Comment } from 'core/domain/comments'
 import { Post } from 'core/domain/posts/post'
 import {Map} from 'immutable'
+import { VoteTargetType } from 'src/constants/voteActionType'
+
 export interface IPostComponentProps {
 
   /**
@@ -31,6 +33,9 @@ export interface IPostComponentProps {
    * @memberof IPostComponentProps
    */
   voteCount?: number
+  laughVoteCount?: number
+  smileVoteCount?: number
+  angryVoteCount?: number
 
   /**
    * Current user vote the post {true} or not {false}
@@ -39,6 +44,9 @@ export interface IPostComponentProps {
    * @memberof IPostComponentProps
    */
   currentUserVote?: boolean
+  currentUserLaughVote?: boolean
+  currentUserSmileVote?: boolean
+  currentUserAngryVote?: boolean
 
   /**
    * Current user is the owner of the post {true} or not {false}
@@ -54,6 +62,9 @@ export interface IPostComponentProps {
    * @memberof IPostComponentProps
    */
   vote?: () => any
+  laughVote?: () => any
+  smileVote?: () => any
+  angryVote?: () => any
 
   /**
    * Delete a vote on the post
@@ -61,6 +72,9 @@ export interface IPostComponentProps {
    * @memberof IPostComponentProps
    */
   unvote?: () => any
+  laughUnvote?: () => any
+  smileUnvote?: () => any
+  angryUnvote?: () => any
 
   /**
    * Delte a post

@@ -370,11 +370,13 @@ export class PostWriteComponent extends Component<IPostWriteComponentProps, IPos
       /**
        * If it's true comment will be disabled on post
        */
-      disableComments: this.props.edit && postModel ? postModel.get('disableComments') : false,
+      // disableComments: this.props.edit && postModel ? postModel.get('disableComments') : false,
+      disableComments: false,
       /**
        * If it's true share will be disabled on post
        */
-      disableSharing: this.props.edit && postModel ? postModel.get('disableSharing') : false
+      // disableSharing: this.props.edit && postModel ? postModel.get('disableSharing') : false
+      disableSharing: true
 
       })
     }
@@ -492,7 +494,7 @@ export class PostWriteComponent extends Component<IPostWriteComponentProps, IPos
               <CardHeader
                 title={author}
                 avatar={postAvatar}
-                action={rightIconMenu}
+                // action={rightIconMenu}
               >
               </CardHeader>
               <CardContent>

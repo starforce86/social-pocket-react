@@ -1,5 +1,5 @@
 import { User } from 'core/domain/users'
-import { Graph } from 'core/domain/graphs'
+import { Graph, FriendGraph } from 'core/domain/graphs'
 import firebase from 'firebase'
 
 /**
@@ -20,9 +20,19 @@ export interface IGraphService {
   updateGraph: (graph: Graph, collection: string) => Promise<string>
 
   /**
+   * Update friend graph
+   */
+  updateFriendGraph: (graph: FriendGraph, collection: string) => Promise<string>
+
+  /**
    * Get graphs data
    */
-  getGraphs: (collection: string, leftNode?: string | null, edgeType?: string, rightNode?: string | null) => Promise<Graph[]>
+  getGraphs: (collection: string, leftNode?: string | null, edgeType?: string, rightNode?: string | null, friendStatus?: string | null) => Promise<Graph[]>
+
+  /**
+   * Get friend graphs data
+   */
+  getOrGraphs: (collection: string, leftNode?: string | null, edgeType?: string, rightNode?: string | null) => Promise<Graph[]>
 
   /**
    * Delete graph by node identifier

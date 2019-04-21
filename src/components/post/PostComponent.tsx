@@ -59,10 +59,21 @@ import * as commentActions from 'store/actions/commentActions'
 import * as globalActions from 'store/actions/globalActions'
 import { IPostComponentProps } from './IPostComponentProps'
 import { IPostComponentState } from './IPostComponentState'
+import { VoteTargetType } from 'src/constants/voteActionType'
 
 const styles = (theme: any) => ({
   iconButton: {
-    marginLeft: 5
+    marginLeft: 5,
+    marginRight: 5
+  },
+  smileyIconButton: {
+    marginLeft: 5,
+    marginTop: 15
+  },
+  smileyIconCheckedButton: {
+    marginLeft: 5,
+    marginTop: 15,
+    color: '#4CAF50'
   },
   vote: {
     display: 'flex',
@@ -74,6 +85,9 @@ const styles = (theme: any) => ({
     fontWeight: 400,
     padding: 2,
     zIndex: 1
+  },
+  smileyVoteCounter: {
+    marginLeft: 20
   },
   commentCounter: {
     color: 'rgb(134, 129, 129)',
@@ -141,7 +155,7 @@ export class PostComponent extends Component<IPostComponentProps, IPostComponent
       /**
        * Handle open comment from parent component
        */
-      openComments: false,
+      openComments: true,
       /**
        * If it's true, share dialog will be open
        */
@@ -300,6 +314,27 @@ export class PostComponent extends Component<IPostComponentProps, IPostComponent
       this.props.vote!()
     }
   }
+  handleLaughVote = () => {
+    if (this.props.currentUserLaughVote) {
+      this.props.laughUnvote!()
+    } else {
+      this.props.laughVote!()
+    }
+  }
+  handleSmileVote = () => {
+    if (this.props.currentUserSmileVote) {
+      this.props.smileUnvote!()
+    } else {
+      this.props.smileVote!()
+    }
+  }
+  handleAngryVote = () => {
+    if (this.props.currentUserAngryVote) {
+      this.props.angryUnvote!()
+    } else {
+      this.props.angryVote!()
+    }
+  }
 
   /**
    * Set open comment group function on state which passed by CommentGroup component
@@ -320,6 +355,15 @@ export class PostComponent extends Component<IPostComponentProps, IPostComponent
       readMoreState: !this.state.readMoreState
 
     })
+  }
+
+  componentDidMount() {
+    const { getPostComments, commentList, post } = this.props
+    const id = post.get('id')
+    const ownerUserId = post.get('ownerUserId')
+    if (!commentList) {
+      getPostComments!(ownerUserId!, id!)
+    }
   }
 
   shouldComponentUpdate(nextProps: IPostComponentProps ,nextState: IPostComponentState) {
@@ -444,6 +488,24 @@ export class PostComponent extends Component<IPostComponentProps, IPostComponent
               />
               <div className={classes.voteCounter}> {this.props.voteCount! > 0 ? this.props.voteCount : ''} </div>
             </IconButton>
+            <IconButton
+              className={this.props.currentUserLaughVote ? classNames('flaticon-happy icon__svg', classes.smileyIconCheckedButton) : classNames('flaticon-happy icon__svg', classes.smileyIconButton)}
+              onClick={this.handleLaughVote}
+              aria-label='Love'>
+              <div className={classNames(classes.smileyVoteCounter, classes.voteCounter)}> {this.props.laughVoteCount! > 0 ? this.props.laughVoteCount : ''} </div>
+            </IconButton>
+            <IconButton
+              className={this.props.currentUserSmileVote ? classNames('flaticon-happy-2 icon__svg', classes.smileyIconCheckedButton) : classNames('flaticon-happy-2 icon__svg', classes.smileyIconButton)}
+              onClick={this.handleSmileVote}
+              aria-label='Love'>
+              <div className={classNames(classes.smileyVoteCounter, classes.voteCounter)}> {this.props.smileVoteCount! > 0 ? this.props.smileVoteCount : ''} </div>
+            </IconButton>
+            <IconButton
+              className={this.props.currentUserAngryVote ? classNames('flaticon-sad-2 icon__svg', classes.smileyIconCheckedButton) : classNames('flaticon-sad-2 icon__svg', classes.smileyIconButton)}
+              onClick={this.handleAngryVote}
+              aria-label='Love'>
+              <div className={classNames(classes.smileyVoteCounter, classes.voteCounter)}> {this.props.angryVoteCount! > 0 ? this.props.angryVoteCount : ''} </div>
+            </IconButton>
           </div>
           {!disableComments ?
             (<div style={{ display: 'inherit' }}><IconButton
@@ -451,7 +513,7 @@ export class PostComponent extends Component<IPostComponentProps, IPostComponent
               onClick={this.handleOpenComments}
               aria-label='Comment'>
               <SvgComment />
-              <div className={classes.commentCounter}>{commentCounter! > 0 ? commentCounter : ''} </div>
+              <div className={classNames(classes.smileyVoteCounter, classes.voteCounter)}>{commentCounter! > 0 ? commentCounter : ''} </div>
             </IconButton>
             </div>) : ''}
           {!disableSharing ? (<IconButton
@@ -493,8 +555,14 @@ export class PostComponent extends Component<IPostComponentProps, IPostComponent
 const mapDispatchToProps = (dispatch: any, ownProps: IPostComponentProps) => {
   const { post } = ownProps
   return {
-    vote: () => dispatch(voteActions.dbAddVote(post.get('id'), post.get('ownerUserId'))),
-    unvote: () => dispatch(voteActions.dbDeleteVote(post.get('id'), post.get('ownerUserId'))),
+    vote: () => dispatch(voteActions.dbAddVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.HEART)),
+    laughVote: () => dispatch(voteActions.dbAddVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.LAUGH)),
+    smileVote: () => dispatch(voteActions.dbAddVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.SMILE)),
+    angryVote: () => dispatch(voteActions.dbAddVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.ANGRY)),
+    unvote: () => dispatch(voteActions.dbDeleteVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.HEART)),
+    laughUnvote: () => dispatch(voteActions.dbDeleteVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.LAUGH)),
+    smileUnvote: () => dispatch(voteActions.dbDeleteVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.SMILE)),
+    angryUnvote: () => dispatch(voteActions.dbDeleteVote(post.get('id'), post.get('ownerUserId'), VoteTargetType.ANGRY)),
     delete: (id: string) => dispatch(postActions.dbDeletePost(id)),
     toggleDisableComments: (status: boolean) => {
       dispatch(postActions.dbUpdatePost(post.set('disableComments', status), (x: any) => x))
@@ -516,7 +584,13 @@ const mapStateToProps = (state: Map<string, any>, ownProps: IPostComponentProps)
 
   const uid = state.getIn(['authorize', 'uid'])
   let currentUserVote = ownProps.post.getIn(['votes', uid], false)
+  let currentUserLaughVote = ownProps.post.getIn(['votesLaugh', uid], false)
+  let currentUserSmileVote = ownProps.post.getIn(['votesSmile', uid], false)
+  let currentUserAngryVote = ownProps.post.getIn(['votesAngry', uid], false)
   const voteCount = state.getIn(['post', 'userPosts', ownProps.post.get('ownerUserId'), ownProps.post.get('id'), 'score'], 0)
+  const laughVoteCount = state.getIn(['post', 'userPosts', ownProps.post.get('ownerUserId'), ownProps.post.get('id'), 'scoreLaugh'], 0)
+  const smileVoteCount = state.getIn(['post', 'userPosts', ownProps.post.get('ownerUserId'), ownProps.post.get('id'), 'scoreSmile'], 0)
+  const angryVoteCount = state.getIn(['post', 'userPosts', ownProps.post.get('ownerUserId'), ownProps.post.get('id'), 'scoreAngry'], 0)
   const commentList: { [commentId: string]: Comment } = state.getIn(['comment', 'postComments', ownProps.post.get('id')])
   const user = state.getIn(['user', 'info', ownProps.post.get('ownerUserId')])
   return {
@@ -525,7 +599,13 @@ const mapStateToProps = (state: Map<string, any>, ownProps: IPostComponentProps)
     avatar: user ? user.avatar : '',
     fullName: user ? user.fullName : '',
     voteCount,
+    laughVoteCount,
+    smileVoteCount,
+    angryVoteCount,
     currentUserVote,
+    currentUserLaughVote,
+    currentUserSmileVote,
+    currentUserAngryVote,
     isPostOwner: uid === ownProps.post.get('ownerUserId')
   }
 }

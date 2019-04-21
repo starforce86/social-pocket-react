@@ -27,6 +27,10 @@ const AsyncPeople = Loadable({
   loader: () => import('containers/people'),
   loading: MasterLoadingComponent,
 })
+const AsyncFriends = Loadable({
+  loader: () => import('containers/friends'),
+  loading: MasterLoadingComponent,
+})
 
 /**
  * Home Router
@@ -39,6 +43,7 @@ export class HomeRouter extends Component<IRouterProps, any> {
           enabled ? (
           <Switch>
             <PrivateRoute path='/people/:tab?' component={<AsyncPeople />} />
+            <PrivateRoute path='/friends' component={<AsyncFriends />} />
 
             <PrivateRoute path='/tag/:tag' component={(
             <div><St displayWriting={false} homeTitle={`#${match.params.tag}`} posts={data.mergedPosts} /></div>

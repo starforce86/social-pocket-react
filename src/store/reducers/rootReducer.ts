@@ -6,6 +6,7 @@ import {
 // - Import reducers
 import { authorizeReducer } from './authorize'
 import { circleReducer } from './circles'
+import { friendReducer } from './friends'
 import { commentReducer } from './comments'
 import { globalReducer } from './global'
 import { imageGalleryReducer } from './imageGallery'
@@ -22,6 +23,7 @@ export const rootReducer = (history: any) => combineReducers({
     imageGallery: imageGalleryReducer,
     post: postReducer,
     circle: circleReducer,
+    friend: friendReducer,
     comment: commentReducer,
     vote: voteReducer,
     server: serverReducer,

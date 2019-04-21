@@ -652,7 +652,7 @@ g__input-underline::after {
     height: 100%;
     text-align: center; }
   .sendFeedback__content .main-box {
-    padding: 26px 26px 0px 26px; }
+    padding: 26px 60px 0px 26px; }
   .sendFeedback__content .buttons {
     margin-top: 20px;
     margin-left: 50px;
@@ -664,7 +664,7 @@ g__input-underline::after {
   .sendFeedback__content .success {
     padding: 30px; }
   .sendFeedback__content .error {
-    padding: 30px; }
+    padding: 30px 60px 30px 30px; }
   .sendFeedback__content .loading {
     padding: 18px 0px 0px 0px; }
     .sendFeedback__content .loading .icon {

@@ -2,7 +2,7 @@ import moment from 'moment/moment'
 import {Map} from 'immutable'
 
 // - Import action types
-import { VoteActionType } from 'constants/voteActionType'
+import { VoteActionType, VoteTargetType } from 'constants/voteActionType'
 
 // - Import domain
 import { Vote } from 'src/core/domain/votes'
@@ -29,7 +29,7 @@ const voteService: IVoteService = provider.get<IVoteService>(SocialProviderTypes
  * @param  {string} postId is the identifier of the post which user vote
  * @param  {string} ownerPostUserId is the identifier of the post owner which user vote
  */
-export const dbAddVote = (postId: string,ownerPostUserId: string) => {
+export const dbAddVote = (postId: string,ownerPostUserId: string, voteTargetType: VoteTargetType) => {
   return (dispatch: any, getState: Function) => {
 
     const state: Map<string, any> = getState()
@@ -43,17 +43,38 @@ export const dbAddVote = (postId: string,ownerPostUserId: string) => {
       userId: uid
     }
     const post: Map<string, any> = state.getIn(['post', 'userPosts', ownerPostUserId, postId])
-    const score = Number(post.get('score', 0)) + 1
-     const votedPost = post
-     .set('score', score)
-     .setIn(['votes',uid], true)
-    dispatch(postActions.updatePost(votedPost))
+    let score
+    let votedPost: Map<string, any>
+    
+    if (voteTargetType === VoteTargetType.HEART) {
+      score = Number(post.get('score', 0)) + 1 
+      votedPost = post
+        .set('score', score)
+        .setIn(['votes', uid], true)
+    } else if (voteTargetType === VoteTargetType.LAUGH) {
+      score = Number(post.get('scoreLaugh', 0)) + 1 
+      votedPost = post
+        .set('scoreLaugh', score)
+        .setIn(['votesLaugh', uid], true)
+    } else if (voteTargetType === VoteTargetType.SMILE) {
+      score = Number(post.get('scoreSmile', 0)) + 1 
+      votedPost = post
+        .set('scoreSmile', score)
+        .setIn(['votesSmile', uid], true)
+    } else if (voteTargetType === VoteTargetType.ANGRY) {
+      score = Number(post.get('scoreAngry', 0)) + 1 
+      votedPost = post
+        .set('scoreAngry', score)
+        .setIn(['votesAngry', uid], true)
+    } 
 
-    return voteService.addVote(vote).then((voteKey: string) => {
+    dispatch(postActions.updatePost(votedPost!))
+
+    return voteService.addVote(vote, voteTargetType).then((voteKey: string) => {
       if (uid !== ownerPostUserId) {
         dispatch(notifyActions.dbAddNotification(
           {
-            description: 'Vote on your post.',
+            description: `Vote ${voteTargetType} on your post.`,
             url: `/${ownerPostUserId}/posts/${postId}`,
             notifyRecieverUserId: ownerPostUserId,notifierUserId: uid,
             isSeen: false
@@ -62,11 +83,30 @@ export const dbAddVote = (postId: string,ownerPostUserId: string) => {
 
     })
     .catch((error) => {
-      const score = post.get('score', 0) - 1
-      const votedPost = post
-     .set('score', score)
-     .setIn(['votes',uid], false)
-      dispatch(postActions.updatePost(votedPost))
+      let score
+      let votedPost: Map<string, any>
+      if (voteTargetType === VoteTargetType.HEART) {
+        score = post.get('score', 0) - 1
+        votedPost = post
+          .set('score', score)
+          .setIn(['votes',uid], false)
+      } else if (voteTargetType === VoteTargetType.LAUGH) {
+        score = post.get('scoreLaugh', 0) - 1
+        votedPost = post
+          .set('scoreLaugh', score)
+          .setIn(['votesLaugh',uid], false)
+      } else if (voteTargetType === VoteTargetType.SMILE) {
+        score = post.get('scoreSmile', 0) - 1
+        votedPost = post
+          .set('scoreSmile', score)
+          .setIn(['votesSmile',uid], false)
+      } else if (voteTargetType === VoteTargetType.ANGRY) {
+        score = post.get('scoreAngry', 0) - 1
+        votedPost = post
+          .set('scoreAngry', score)
+          .setIn(['votesAngry',uid], false)
+      } 
+      dispatch(postActions.updatePost(votedPost!))
       dispatch(globalActions.showMessage(error.message))
     })
   }
@@ -104,23 +144,64 @@ export const dbGetVotes = (userId: string, postId: string) => {
  * @param  {string} id of vote
  * @param {string} postId is the identifier of the post which vote belong to
  */
-export const dbDeleteVote = (postId: string, ownerPostUserId: string) => {
+export const dbDeleteVote = (postId: string, ownerPostUserId: string, voteTargetType: VoteTargetType) => {
   return (dispatch: any, getState: Function) => {
     const state: Map<string, any> = getState()
     let uid: string = state.getIn(['authorize', 'uid'])
     const post: Map<string, any> = state.getIn(['post', 'userPosts', ownerPostUserId, postId])
-    const score = post.get('score', 0) - 1
-    const votedPost = post
-     .set('score', score)
-     .setIn(['votes',uid], false)
-    dispatch(postActions.updatePost(votedPost))
-    return voteService.deleteVote(uid, postId).then(x => x)
+    let score
+    let votedPost: any
+    
+    if (voteTargetType === VoteTargetType.HEART) {
+      score = post.get('score', 0) - 1
+      votedPost = post
+        .set('score', score)
+        .setIn(['votes', uid], false)
+    } else if (voteTargetType === VoteTargetType.LAUGH) {
+      score = post.get('scoreLaugh', 0) - 1
+      votedPost = post
+        .set('scoreLaugh', score)
+        .setIn(['votesLaugh', uid], false)
+    } else if (voteTargetType === VoteTargetType.SMILE) {
+      score = post.get('scoreSmile', 0) - 1
+      votedPost = post
+        .set('scoreSmile', score)
+        .setIn(['votesSmile', uid], false)
+    } else if (voteTargetType === VoteTargetType.ANGRY) {
+      score = post.get('scoreAngry', 0) - 1
+      votedPost = post
+        .set('scoreAngry', score)
+        .setIn(['votesAngry', uid], false)
+    }
+    dispatch(postActions.updatePost(votedPost!))
+    return voteService.deleteVote(uid, postId, voteTargetType).then(x => x)
     .catch((error: any) => {
-      const score = post.get('score', 0) + 1
-      const votedPost = post
-     .set('score', score)
-     .setIn(['votes',uid], true)
-      dispatch(postActions.updatePost(votedPost))
+      let score
+      let votedPost: Map<string, any>
+
+      if (voteTargetType === VoteTargetType.HEART) {
+        score = post.get('score', 0) + 1
+        votedPost = post
+          .set('score', score)
+          .setIn(['votes', uid], true)
+      } else if (voteTargetType === VoteTargetType.LAUGH) {
+        score = post.get('scoreLaugh', 0) + 1
+        votedPost = post
+          .set('scoreLaugh', score)
+          .setIn(['votesLaugh', uid], true)
+      } else if (voteTargetType === VoteTargetType.SMILE) {
+        score = post.get('scoreSmile', 0) + 1
+        votedPost = post
+          .set('scoreSmile', score)
+          .setIn(['votesSmile', uid], true)
+      } else if (voteTargetType === VoteTargetType.ANGRY) {
+        score = post.get('scoreAngry', 0) + 1
+        votedPost = post
+          .set('scoreAngry', score)
+          .setIn(['votesAngry', uid], true)
+      }
+
+      dispatch(postActions.updatePost(votedPost!))
       dispatch(globalActions.showMessage(error.message))
     })
   }

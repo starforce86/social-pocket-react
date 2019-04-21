@@ -6,6 +6,7 @@ import { Vote } from 'core/domain/votes'
 import { IVoteService } from 'core/services/votes'
 import { injectable } from 'inversify'
 import { Post } from 'core/domain/posts/post'
+import { VoteTargetType } from 'src/constants/voteActionType'
 
 /**
  * Firbase vote service
@@ -17,11 +18,12 @@ import { Post } from 'core/domain/posts/post'
 @injectable()
 export class VoteService implements IVoteService {
 
-  public addVote: (vote: Vote)
-    => Promise<string> = (vote) => {
+  public addVote: (vote: Vote, voteTargetType: VoteTargetType)
+    => Promise<string> = (vote, voteTargetType) => {
       return new Promise<string>((resolve,reject) => {
         const postRef = db.doc(`posts/${vote.postId}`)
-        let voteRef = postRef.collection(`votes`).doc(vote.userId)
+        const collectionStr = this.getCollectionString(voteTargetType)
+        let voteRef = postRef.collection(collectionStr).doc(vote.userId)
         .set({...vote})
         voteRef.then((result) => {
           resolve()
@@ -32,16 +34,61 @@ export class VoteService implements IVoteService {
             return transaction.get(postRef).then((postDoc) => {
               if (postDoc.exists) {
                 const post = postDoc.data() as Post
-                let {votes, score} = post
-                if (!votes) {
-                  votes = {}
+
+                if (voteTargetType === VoteTargetType.HEART) {
+                  
+                  let {votes, score} = post
+                  if (!votes) {
+                    votes = {}
+                  }
+                  if (!score) {
+                    score = 0
+                  }
+                  const newScore = score + 1
+                  votes[vote.userId] = true
+                  transaction.update(postRef, { votes: { ...votes}, score: newScore })
+
+                } else if (voteTargetType === VoteTargetType.LAUGH) {
+
+                  let {votesLaugh, scoreLaugh} = post
+                  if (!votesLaugh) {
+                    votesLaugh = {}
+                  }
+                  if (!scoreLaugh) {
+                    scoreLaugh = 0
+                  }
+                  const newScore = scoreLaugh + 1
+                  votesLaugh[vote.userId] = true
+                  transaction.update(postRef, { votesLaugh: { ...votesLaugh}, scoreLaugh: newScore })
+
+                } else if (voteTargetType === VoteTargetType.SMILE) {
+
+                  let {votesSmile, scoreSmile} = post
+                  if (!votesSmile) {
+                    votesSmile = {}
+                  }
+                  if (!scoreSmile) {
+                    scoreSmile = 0
+                  }
+                  const newScore = scoreSmile + 1
+                  votesSmile[vote.userId] = true
+                  transaction.update(postRef, { votesSmile: { ...votesSmile}, scoreSmile: newScore })
+
+                } else if (voteTargetType === VoteTargetType.ANGRY) {
+
+                  let {votesAngry, scoreAngry} = post
+                  if (!votesAngry) {
+                    votesAngry = {}
+                  }
+                  if (!scoreAngry) {
+                    scoreAngry = 0
+                  }
+                  const newScore = scoreAngry + 1
+                  votesAngry[vote.userId] = true
+                  transaction.update(postRef, { votesAngry: { ...votesAngry}, scoreAngry: newScore })
+
                 }
-                if (!score) {
-                  score = 0
-                }
-                const newScore = score + 1
-                votes[vote.userId] = true
-                transaction.update(postRef, { votes: { ...votes}, score: newScore })
+                
               }
             })
           })
@@ -69,12 +116,13 @@ export class VoteService implements IVoteService {
       })
     }
 
-  public deleteVote: (userId: string, postId: string)
-    => Promise<void> = (userId, postId) => {
+  public deleteVote: (userId: string, postId: string, voteTargetType: VoteTargetType)
+    => Promise<void> = (userId, postId, voteTargetType) => {
       return new Promise<void>((resolve,reject) => {
         const batch = db.batch()
         const postRef = db.doc(`posts/${postId}`)
-        let voteRef = postRef.collection(`votes`).doc(userId)
+        const collectionStr = this.getCollectionString(voteTargetType)
+        let voteRef = postRef.collection(collectionStr).doc(userId)
 
         batch.delete(voteRef)
         batch.commit().then(() => {
@@ -86,16 +134,53 @@ export class VoteService implements IVoteService {
             return transaction.get(postRef).then((postDoc) => {
               if (postDoc.exists) {
                 const post = postDoc.data() as Post
-                let {votes, score} = post
-                if (!votes) {
-                  votes = {}
+
+                if (voteTargetType === VoteTargetType.HEART) {
+                  let {votes, score} = post
+                  if (!votes) {
+                    votes = {}
+                  }
+                  if (!score) {
+                    score = 0
+                  }
+                  const newScore = score - 1
+                  votes[userId] = false
+                  transaction.update(postRef, { votes: { ...votes}, score: newScore })
+                } else if (voteTargetType === VoteTargetType.LAUGH) {
+                  let {votesLaugh, scoreLaugh} = post
+                  if (!votesLaugh) {
+                    votesLaugh = {}
+                  }
+                  if (!scoreLaugh) {
+                    scoreLaugh = 0
+                  }
+                  const newScore = scoreLaugh - 1
+                  votesLaugh[userId] = false
+                  transaction.update(postRef, { votesLaugh: { ...votesLaugh}, scoreLaugh: newScore })
+                } else if (voteTargetType === VoteTargetType.SMILE) {
+                  let {votesSmile, scoreSmile} = post
+                  if (!votesSmile) {
+                    votesSmile = {}
+                  }
+                  if (!scoreSmile) {
+                    scoreSmile = 0
+                  }
+                  const newScore = scoreSmile - 1
+                  votesSmile[userId] = false
+                  transaction.update(postRef, { votesSmile: { ...votesSmile}, scoreSmile: newScore })
+                } else if (voteTargetType === VoteTargetType.ANGRY) {
+                  let {votesAngry, scoreAngry} = post
+                  if (!votesAngry) {
+                    votesAngry = {}
+                  }
+                  if (!scoreAngry) {
+                    scoreAngry = 0
+                  }
+                  const newScore = scoreAngry - 1
+                  votesAngry[userId] = false
+                  transaction.update(postRef, { votesAngry: { ...votesAngry}, scoreAngry: newScore })
                 }
-                if (!score) {
-                  score = 0
-                }
-                const newScore = score - 1
-                votes[userId] = false
-                transaction.update(postRef, { votes: { ...votes}, score: newScore })
+                
               }
             })
           })
@@ -105,4 +190,25 @@ export class VoteService implements IVoteService {
         })
       })
     }
+
+  private getCollectionString: (voteTargetType: VoteTargetType) => string = (voteTargetType) => {
+    let result: string = ''
+    switch (voteTargetType) {
+      case VoteTargetType.HEART:
+        result = 'votes'
+        break
+      case VoteTargetType.LAUGH:
+        result = 'votesLaugh'
+        break
+      case VoteTargetType.SMILE:
+        result = 'votesSmile'
+        break
+      case VoteTargetType.ANGRY:
+        result = 'votesAngry'
+        break
+      default:
+        break
+    }
+    return result
+  }
 }

@@ -41,6 +41,9 @@ export class Post extends BaseDomain {
      * @memberof Post
      */
   public score?: number
+  public scoreLaugh?: number
+  public scoreSmile?: number
+  public scoreAngry?: number
 
   /**
    * List of voter identifier
@@ -49,6 +52,9 @@ export class Post extends BaseDomain {
    * @memberof Post
    */
   votes?: {[voterId: string]: boolean}
+  votesLaugh?: {[voterId: string]: boolean}
+  votesSmile?: {[voterId: string]: boolean}
+  votesAngry?: {[voterId: string]: boolean}
 
     /**
      * Post view count

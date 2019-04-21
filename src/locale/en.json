@@ -3,8 +3,10 @@
         "home": "Home",
         "profile": "Profile",
         "people": "People",
+        "friends": "Friends",
         "settings": "Settings",
-        "sendFeedback": "Send Feedback"
+        "sendFeedback": "Send Feedback",
+        "changePassword": "Change Password"
 
     },
     "header": {
@@ -81,9 +83,21 @@
         "followersLabel": "Followers",
         "noFollowersLabel": "No followers!"
     },
+    "friends": {
+        "friendsLabel": "Friends",
+        "friendRequestsLabel": "Friend Requests - Accept / Deny",
+        "noFriendsLabel": "No Friends!",
+        "noFriendRequestsLabel": "No Friend Requests!",
+        "friendAddButtonText": "Add friend, enter user id",
+        "cancelButton": "Cancel",
+        "addButton": "Request",
+        "addFriendTextareaPlaceholder": "What's friend's email?"
+    },
     "userBox": {
         "followButton": "FOLLOW",
         "cancelButton": "CANCEL",
+        "acceptButton": "ACCEPT",
+        "denyButton": "DENY",
         "numberOfCircleButton": "${circlesCount} Circles",
         "doneButton": "DONE",
         "groupNamePlaceholder": "Group Name",

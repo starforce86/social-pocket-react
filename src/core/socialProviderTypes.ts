@@ -5,6 +5,7 @@
 export const SocialProviderTypes = {
   AuthorizeService: Symbol('AuthorizeService'),
   UserTieService: Symbol('UserTieService'),
+  FriendService: Symbol('FriendService'),
   CircleService: Symbol('CircleService'),
   CommentService: Symbol('CommentService'),
   CommonService: Symbol('CommonService'),

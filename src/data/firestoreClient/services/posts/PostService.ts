@@ -1,6 +1,6 @@
 // - Import react components
 import { firebaseAuth, db } from 'data/firestoreClient'
-
+import { Map, List } from 'immutable'
 import { SocialError } from 'core/domain/common'
 import { Post } from 'core/domain/posts'
 import { IPostService } from 'core/services/posts'
@@ -78,44 +78,62 @@ export class PostService implements IPostService {
     => Promise<{ posts: { [postId: string]: Post }[], newLastPostId: string }> = (currentUserId, lastPostId, page = 0, limit = 10) => {
       return new Promise<{ posts: { [postId: string]: Post }[], newLastPostId: string }>((resolve, reject) => {
         let postList: { [postId: string]: Post }[] = []
+        let tieFriends: Array<string> = []
 
         // Get user ties
-        db.collection('graphs:users').where('leftNode', '==', currentUserId)
-          .get().then((tieUsers) => {
-            if (!(tieUsers.size > 0)) {
-                // Get current user posts
-              this.getPostsByUserId(currentUserId,lastPostId, page, limit).then((result) => {
-                resolve(result)
-              })
-            }
+        db.collection('graphs:friends').where('friendStatus', '==', 'accepted').where('leftNode', '==', currentUserId)
+          .get().then((tieUsers1) => {
+            tieUsers1.forEach((item) => {
+              if (item.data().leftNode === currentUserId) {
+                tieFriends.push(item.data().rightNode)
+              } else if (item.data().rightNode === currentUserId) {
+                tieFriends.push(item.data().leftNode)
+              }
+            })
+            db.collection('graphs:friends').where('friendStatus', '==', 'accepted').where('rightNode', '==', currentUserId)
+              .get().then((tieUsers2) => {
+                tieUsers2.forEach((item) => {
+                  if (item.data().leftNode === currentUserId) {
+                    tieFriends.push(item.data().rightNode)
+                  } else if (item.data().rightNode === currentUserId) {
+                    tieFriends.push(item.data().leftNode)
+                  }
+                })
 
-            let userCounter = 0
-            const userIdList: Array<string> = []
-            tieUsers.forEach((item) => {
-              const userId = item.data().rightNode
-              if (!userIdList.includes(userId)) {
-
-              // Get user tie posts
-                this.getPostsByUserId(userId).then((posts) => {
-                  userCounter++
-                  postList = [
-                    ...postList,
-                    ...posts.posts
-                  ]
-                  if (userCounter === tieUsers.size) {
+                if (!(tieFriends.length > 0)) {
                   // Get current user posts
-                    this.getPostsByUserId(currentUserId).then((result) => {
+                  this.getPostsByUserId(currentUserId,lastPostId, page, limit).then((result) => {
+                    resolve(result)
+                  })
+                }
+    
+                let userCounter = 0
+                const userIdList: Array<string> = []
+                tieFriends.forEach((userId) => {
+                  if (!userIdList.includes(userId)) {
+    
+                  // Get user tie posts
+                    this.getPostsByUserId(userId).then((posts) => {
+                      userCounter++
                       postList = [
                         ...postList,
-                        ...result.posts
+                        ...posts.posts
                       ]
-
-                      resolve(this.pagingPosts(postList, lastPostId, limit))
+                      if (userCounter === tieFriends.length) {
+                      // Get current user posts
+                        this.getPostsByUserId(currentUserId).then((result) => {
+                          postList = [
+                            ...postList,
+                            ...result.posts
+                          ]
+    
+                          resolve(this.pagingPosts(postList, lastPostId, limit))
+                        })
+                      }
                     })
                   }
                 })
-              }
-            })
+              })
           })
           .catch((error: any) => {
             reject(new SocialError(error.code, error.message))

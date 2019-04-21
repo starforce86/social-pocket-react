@@ -55,7 +55,8 @@ import {
   userActions,
   globalActions,
   circleActions,
-  notifyActions
+  notifyActions,
+  friendActions
 } from 'src/store/actions'
 
 import { IHomeComponentProps } from './IHomeComponentProps'
@@ -223,13 +224,21 @@ export class HomeComponent extends Component<IHomeComponentProps, IHomeComponent
           <ListItemText inset primary={translate!('sidebar.people')} />
         </MenuItem>
       </NavLink>
+      <NavLink to='/friends'>
+        <MenuItem style={{ color: 'rgb(117, 117, 117)' }}>
+          <ListItemIcon>
+            <SvgPeople />
+          </ListItemIcon>
+          <ListItemText inset primary={translate!('sidebar.friends')} />
+        </MenuItem>
+      </NavLink>
       <Divider />
       <NavLink to='/settings'>
         <MenuItem style={{ color: 'rgb(117, 117, 117)' }}>
           <ListItemIcon>
             <SvgSettings />
           </ListItemIcon>
-          <ListItemText inset primary={translate!('sidebar.settings')} />
+          <ListItemText inset primary={translate!('sidebar.changePassword')} />
         </MenuItem>
       </NavLink>
       <MenuItem onClick={() => showSendFeedback!()} style={{ color: 'rgb(117, 117, 117)' }}>
@@ -312,7 +321,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: IHomeComponentProps) => {
       dispatch(circleActions.dbGetCircles())
       dispatch(circleActions.dbGetUserTies())
       dispatch(circleActions.dbGetFollowers())
-
+      dispatch(friendActions.dbGetAllUsers())
+      dispatch(friendActions.bindFriendEvent())
     },
     clearData: () => {
       dispatch(imageGalleryActions.clearAllData())
@@ -348,10 +358,10 @@ const mapStateToProps = (state: Map<string, any>, ownProps: IHomeComponentProps)
   const global = state.get('global', {})
   let mergedPosts = Map({})
   const circles = state.getIn(['circle', 'circleList'], {})
-  const followingUsers: Map<string, any> = state.getIn(['circle', 'userTies'], {})
+  const friendUsers: Map<string, any> = state.getIn(['friend', 'friendTies'], {})
   const posts = state.getIn(['post', 'userPosts', uid ], {})
   const hasMorePosts = state.getIn(['post', 'stream', 'hasMoreData' ], true)
-  followingUsers.forEach((user, userId) => {
+  friendUsers.forEach((user, userId) => {
     let newPosts = state.getIn(['post', 'userPosts', userId], {})
    mergedPosts = mergedPosts.merge(newPosts)
   })

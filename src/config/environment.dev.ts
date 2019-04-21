@@ -2,12 +2,12 @@ import { LanguageType } from 'store/reducers/locale/langugeType'
 
 export const environment = {
   firebase: {
-    apiKey: 'AIzaSyDBAFzOiHBrhUaBdciv-d-jCVn5KqKMFrg',
-    authDomain: 'social-network-69ccd.firebaseapp.com',
-    databaseURL: 'https://social-network-69ccd.firebaseio.com',
-    projectId: 'social-network-69ccd',
-    storageBucket: 'social-network-69ccd.appspot.com',
-    messagingSenderId: '121119380874'
+    apiKey: 'AIzaSyCVZ97tH6a02Yh9jdJowJewXRjSePIn9s4',
+    authDomain: 'maxim-react-social-network-upd.firebaseapp.com',
+    databaseURL: 'https://maxim-react-social-network-upd.firebaseio.com',
+    projectId: 'maxim-react-social-network-upd',
+    storageBucket: 'maxim-react-social-network-upd.appspot.com',
+    messagingSenderId: '512487036989'
   },
   settings: {
     enabledOAuthLogin: true,
@@ -18,5 +18,8 @@ export const environment = {
   theme: {
     primaryColor: '#00b1b3',
     secondaryColor: '#4d545d'
+  },
+  constants: {
+    maxFriends: 2
   }
 }

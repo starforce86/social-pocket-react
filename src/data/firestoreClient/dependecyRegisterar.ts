@@ -25,6 +25,8 @@ import { NotificationService } from './services/notifications'
 import { FirestoreClientTypes } from './firestoreClientTypes'
 import { IUserTieService } from 'core/services/circles'
 import { UserTieService } from './services/circles/UserTieService'
+import { IFriendService } from 'core/services/circles'
+import { FriendService } from './services/circles/FriendService'
 
 /**
  * Register firestore client dependecies
@@ -43,5 +45,5 @@ export const useFirestore = (container: Container) => {
   container.bind<IVoteService>(SocialProviderTypes.VoteService).to(VoteService)
   container.bind<IGraphService>(FirestoreClientTypes.GraphService).to(GraphService)
   container.bind<IUserTieService>(SocialProviderTypes.UserTieService).to(UserTieService)
-
+  container.bind<IFriendService>(SocialProviderTypes.FriendService).to(FriendService)
 }
