@@ -204,29 +204,6 @@ There are three main layers:
   * [InversifyJS](http://inversify.io/) InversifyJS is a lightweight (4KB) inversion of control (IoC) container for TypeScript and JavaScript apps. A IoC container uses a class constructor to identify and inject its dependencies.
   * [create-react-app](https://github.com/facebook/create-react-app) Create React App is a tool built by developers at Facebook to help you build React applications. It saves you from time-consuming setup and configuration. You simply run one command and create react app sets up the tools you need to start your React project.
 
-## :heart: Contributing :heart:
-
-[React Social Network](https://love-social.firebaseapp.com) has been made by love:heart:. I planed to build a back-end for this project and improve the performance as I process all procedures on the front-end side. If you'd like to help,
-check out the [document](https://qolzam.gitbooks.io/react-social-network/).
-I'd greatly appreciate any [contribution](https://github.com/red-gold/react-social-network/blob/next/CONTRIBUTING.md)
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/red-gold/react-social-network/tags). 
-
-## Authors
-
-  - Amir Movahedi
-  - See also the list of [contributors](https://github.com/red-gold/react-social-network/contributors) who participated in this project.
-
-## How To Support
-- [Contribution](https://github.com/red-gold/react-social-network/blob/next/CONTRIBUTING.md)
-- Fork || Star
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/red-gold/react-social-network/blob/next/LICENSE) file for details
-
-
 ## Acknowledgments
 
 * React
