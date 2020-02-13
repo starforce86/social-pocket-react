@@ -1,35 +1,3 @@
-<!-- Logo -->
-<p align="center">
-  <a href="https://github.com/red-gold/react-social-network">
-    <img height="128" width="128" src="https://raw.githubusercontent.com/red-gold/react-social-network/next/docs/app/logo.png">
-  </a>
-</p>
-<!-- Name -->
-<h1 align="center">
-  <a href="https://github.com/red-gold/react-social-network">React Social Network </a>:rocket:<span style="font-variant-caps: petite-caps;font-size: 30px;font-weight: 400;"> Version NEXT! </span>:rocket:
-</h1>
-
-[![Gitter](https://badges.gitter.im/react-social-network/Lobby.svg)](https://gitter.im/react-social-network/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-<br/>
-<a href="https://github.com/red-gold/react-social-network/blob/next/README.cn.md">中文</a>
-<br/>
-The React Social Network is an open source project relying on [React](https://facebook.github.io/react/docs/hello-world.html) a powerful javascript library for building the user interface. In this project, I tried to show some features of react/react components as a social network. 
-The structure of this project give the ability to developer to develop their project on their own idea and environment.
-
-<p align="center">
-  <a href="http://greensocial.herokuapp.com/">
-    <img src="https://raw.githubusercontent.com/red-gold/react-social-network/next/docs/app/multi-device.png">
-  </a>
-</p>
-
-## 🌟New Upgrade :
-React Social Network is [moving on](https://github.com/red-gold/react-social-network/issues/48) [redux-saga](https://redux-saga.js.org/) however we keep [redux-thunk](https://github.com/gaearon/redux-thunk) version of **React Social Network** in branch name `v0.5`. Any contribution would be greatly appreciated by :heart:.
- 
->You should consult the [CHANGELOG](https://github.com/red-gold/react-social-network/blob/next/CHANGELOG.md) and related issues for more information
-
-This project adheres to the Contributor Covenant [code of conduct](https://github.com/red-gold/react-social-network/blob/next/CODE_OF_CONDUCT.md).
-By participating, you are expected to uphold this code. Please report unacceptable behavior to amir.gholzam@live.com.
-
 ## Before Starting
 First of all this is a boilerplate react social and the purpose is to find the best way to implement a huge project such as social network by [React](https://facebook.github.io/react/docs/hello-world.html) . We learn what technology or algorithm could be better solution for our project by [React](https://facebook.github.io/react/docs/hello-world.html). Please approach to this project with these ideas and if you feel that you have better solution, to our great pleasure if we could have your contribution.
   - You are the person who is new to [React](https://facebook.github.io/react/docs/hello-world.html) and you are looking for some ideas to start [React](https://facebook.github.io/react/docs/hello-world.html) with some basic stuff. Also you are the fan of [React Semantic UI](https://react.semantic-ui.com/) I recommend you start with [React Blog Project](https://github.com/Qolzam/react-blog).
@@ -37,36 +5,11 @@ First of all this is a boilerplate react social and the purpose is to find the b
   - You are the fan of pure [Redux](http://redux.js.org/) with [redux-thunk](https://github.com/gaearon/redux-thunk), [TypeScript](https://www.typescriptlang.org/), [InversifyJS](http://inversify.io/) IOC container and you have the knowledge enough about the stuff in [js-react-social-tutorial](https://github.com/Qolzam/js-react-social-tutorial). [Version 0.5.0 branch of react-social-network](https://github.com/Qolzam/react-social-network/tree/v0.5) is the place you can find yourself.
   - You are in advanced level of React and you are in love with learning advanced stuff about [React](https://facebook.github.io/react/docs/hello-world.html) such [Async Component/Lazy loading](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#code-splitting), [redux-saga](https://redux-saga.js.org/) and other cool stuff, well come you here. We are going ahead.👍
 
-## Example
-
-  [Love Open Social](https://love-social.firebaseapp.com)
- 
 ## Required Knowledge
 
 I recommend that you get to know React before using React Social Network. React Social Network has built by React components, so understanding how React fits into web development is important.
 
 (If you're not familiar with the concept of Single Page Applications (SPAs), head over to the [here](https://www.codeschool.com/beginners-guide-to-web-development/single-page-applications) for a quick introduction before you read on.
-
-## Document
-
- Comming soon :) ...
-
-
-## Roadmap
-### Supporting diverse data platforms
-   Platform  | Accessible
------------- | -------------
-[Firebase/Firestore](firebase.google.com/cloud/firestore‎) | :+1:
-[Amazon Web Service (AWS)](https://aws.amazon.com/) | On Developing :zap:
-[Azure](https://aws.amazon.com/) | Future Support :star:
-[ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/) | On Developing :zap:
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
- Install [NodeJs](https://nodejs.org/en/)
  
 #### Note
 
